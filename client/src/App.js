@@ -7,8 +7,10 @@ import Signup from './components/screens/Signup';
 import Login from './components/screens/Login';
 import Profile from './components/screens/Profile';
 import CreatePost from './components/screens/CreatePost';
+import Newpassword from './components/screens/Newpassword'
 import UserProfile from './components/screens/UserProfile'
 import SubscribedUserPosts from './components/screens/SubscribedUserPosts'
+import Reset from './components/screens/Reset'
 import { reducer, initialState } from './reducers/userReducer'
 
 export const UserContext = createContext()
@@ -22,7 +24,8 @@ const Routing = () => {
       dispatch({ type: "USER", payload: user })
 
     } else { // and if user is not logged in then push him to sign in page
-      history.push('/signin')
+      if (!history.location.pathname.startsWith('/reset'))
+        history.push('/signin')
     }
   }, []) //we want this routing function to be implemented only once i.e on mounting that's why we are passing an empty array 
 
@@ -48,6 +51,12 @@ const Routing = () => {
       </Route>
       <Route path="/myfollowingpost">
         <SubscribedUserPosts />
+      </Route>
+      <Route exact path="/reset">
+        <Reset />
+      </Route>
+      <Route path="/reset/:token">
+        <Newpassword />
       </Route>
     </Switch>
   )

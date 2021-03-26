@@ -8,6 +8,7 @@ router.get('/allpost', requireLogin, (req, res) => { //route for showing all pos
     Post.find() //finding all posts using Post model
         .populate('postedBy', '_id name') //populating the postedBy on populating it will show all the details like name, emali, password and id when requested is made but we only want name and _id to be shown that's why we are passing these two in the second arguement
         .populate('comments.postedBy', '_id name')//also populating the comments array
+        .sort('-createdAt')
         .then(posts => {
             res.json({ posts: posts })
         })
@@ -32,6 +33,7 @@ router.get('/getsubpost', requireLogin, (req, res) => { //route for showing all 
     Post.find({ postedBy: { $in: req.user.following } }) // finding the posts where the postedBy comes in the following array 
         .populate("postedBy", "_id name")
         .populate("comments.postedBy", "_id name")
+        .sort('-createdAt')
         .then(posts => {
             res.json({ posts })
         })

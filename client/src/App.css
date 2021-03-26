@@ -57,3 +57,7 @@ margin: 10px auto;
 .material-icons:hover{
   cursor: pointer;
 }
+
+.collection-item {
+  width: 100%;
+}

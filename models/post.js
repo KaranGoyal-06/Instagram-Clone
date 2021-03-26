@@ -28,6 +28,6 @@ const postSchema = new mongoose.Schema({ //creating schema for the new posts cre
         ref: "User"
     }
 
-})
+}, { timestamps: true })
 
 mongoose.model("Post", postSchema)

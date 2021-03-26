@@ -2,12 +2,20 @@ const express = require('express')
 const router = express.Router() //if not working in app.js then we need to use router
 const mongoose = require('mongoose')
 const User = mongoose.model("User")
+const crypto = require('crypto')
 const bcrypt = require('bcryptjs') // npm package to hide the password in database, you can install it by npm i bcryptjs
 const jwt = require('jsonwebtoken') //requiring the json web token it is used to create a token as soon as user is signed in, so that he can use the protected resources, you can install it -> npm i jsonwebtoken
 const { JWT_SECRET } = require('../config/keys')
 const requireLogin = require('../middleware/requireLogin') // requiring the middleware
+const nodemailer = require('nodemailer')
+const sendgridTransport = require('nodemailer-sendgrid-transport')
+const { SENDGRID_API, EMAIL } = require('../config/keys')
 
-
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        api_key: SENDGRID_API
+    }
+}))
 
 
 router.post('/signup', (req, res) => { //creating a signup route for the new user
@@ -30,7 +38,13 @@ router.post('/signup', (req, res) => { //creating a signup route for the new use
                     })
 
                     user.save() // saving the model to database
-                        .then(users => {
+                        .then(user => {
+                            transporter.sendMail({ //process for sending mail on successfully signing up using sendgrit
+                                to: user.email,
+                                from: "karangoyal989@gmail.com",
+                                subject: "Signup Success",
+                                html: "<div><h3>Dear User, </h3><h1>Welcome To My Instagram Clone</h1><h3>You have successfully signed up. Please sign in to experience the application.</h3></div>"
+                            })
                             res.json({ message: "Signed Up Successfully" })
                         })
                         .catch(err => {
@@ -73,6 +87,56 @@ router.post('/signin', (req, res) => { // creating a signin route for the existi
                 })
         })
 
+})
+
+router.post('/reset-password', (req, res) => { //route for resetting password
+    crypto.randomBytes(32, (err, buffer) => {//generating a token
+        if (err) {
+            console.log(err)
+        }
+        const token = buffer.toString("hex")
+        User.findOne({ email: req.body.email })//finding the user with the email entered by him in Reset.js
+            .then(user => {
+                if (!user) {
+                    return res.status(422).json({ error: "User not exists with this email" })
+                }
+                user.resetToken = token//setting token
+                user.expireToken = Date.now() + 3600000 //token will be available for 1 hour i.e 3600000ms
+                user.save().then((result) => {//sending the mail,  on clicking the link below in the mail, the user will redirect to Newpassword.js page with the token in the url
+                    transporter.sendMail({
+                        to: user.email,
+                        from: "karangoyal989@gmail.com",
+                        subject: "Password Reset",
+                        html: `
+                            <p>You have requested for Password reset</p>
+                            <h5>Click on this <a href="${EMAIL}/reset/${token}">Link</a> to reset your password.</h5>
+                            `
+                    })
+                    res.json({ message: "Check Your Email" })
+                })
+            })
+    })
+})
+
+router.post('/new-password', (req, res) => {//route for setting the new password
+    const newPassword = req.body.password //saving the new password
+    const sentToken = req.body.token// saving the token 
+    User.findOne({ resetToken: sentToken, expireToken: { $gt: Date.now() } })//finding the user with sent token
+        .then(user => {
+            if (!user) {
+                return res.status(422).json({ error: "Try Again Session Expired" })
+            }
+            bcrypt.hash(newPassword, 12).then(hashedpassword => { //hashing the new password and saving it in database
+                user.password = hashedpassword
+                user.resetToken = undefined
+                user.expireToken = undefined
+                user.save().then((savedUser) => {
+                    res.json({ message: "Password Updated Success" })
+                })
+            })
+        }).catch(err => {
+            console.log(err)
+        })
 })
 
 
