@@ -15,7 +15,7 @@ function Home() { //function for dynamically creating posts
             }
         }).then(res => res.json())
             .then(result => {
-                console.log(result)
+                //console.log(result)
                 setData(result.posts) //setting data to the obtatined array of result.posts containing info about all the posts
             })
     }, [])
@@ -87,7 +87,7 @@ function Home() { //function for dynamically creating posts
             })
         }).then(res => res.json())
             .then(result => {
-                console.log(result)
+                // console.log(result)
                 const newData = data.map(item => {//function for updating comment state
                     if (item._id === result._id) {
                         return result //if both the id's are equal will return the updated record
@@ -110,7 +110,7 @@ function Home() { //function for dynamically creating posts
             }
         }).then(res => res.json())
             .then(result => {
-                console.log(result)
+                //console.log(result)
                 const newData = data.filter(item => { //filtering out every item or post 
                     return item._id !== result._id //in this filter will return all the items whose id is not equal to id of the post to be deleted i.e will exclude the one post to be deleted and will show rest of the posts hence delete functionality implemented 
                 })

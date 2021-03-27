@@ -48,7 +48,7 @@ function Profile() {
                         })
                     }).then(res => res.json())
                         .then(result => {
-                            console.log(result)
+                            //console.log(result)
                             localStorage.setItem("user", JSON.stringify({ ...state, pic: result.pic }))//changing the pic url in local storage
                             dispatch({ type: "UPDATEPIC", payload: result.pic })//dispatching an action with payload of uploaded pic url
                         })

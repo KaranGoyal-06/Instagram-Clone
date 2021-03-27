@@ -9,7 +9,7 @@ function Login() {
     const history = useHistory()
     const [password, SetPassword] = useState("") //ustate hook for setting the password value when entered by user
     const { token } = useParams()
-    console.log(token)
+    //console.log(token)
 
 
     const PostData = () => { //function for posting signin data to our server

@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom'
 function Home() { //function for dynamically creating posts
     const [data, setData] = useState([]) //hook for setting post data in an array
     const { state, dispatch } = useContext(UserContext) //state has all the details of the user who is logged in
-    console.log(state)
-    console.log(data)
+    //console.log(state)
+    // console.log(data)
     useEffect(() => {
         fetch('/allpost', { //get request for fetching data stored in database regarding all the posts using /allpost route in post.js in server
             headers: {

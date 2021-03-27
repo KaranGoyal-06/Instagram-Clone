@@ -26,7 +26,7 @@ function Login() {
             })
         }).then(res => res.json()) //it parses the json response from fetch into native javascript objects
             .then(data => { // data include javascript objects parsed from res.json
-                console.log(data)
+                //console.log(data)
                 if (data.error) {
                     M.toast({ html: data.error, classes: "#d50000 red accent-4" }) //creating toast to display error on client UI using materialize and in the second arguement changing the color
                 } else { //this will run if there is no error
