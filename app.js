@@ -18,7 +18,7 @@ mongoose.connection.on('error', (err) => {
     console.log('err connecting', err)
 })
 
-mongoose.set('useFindAndModify', false);
+//mongoose.set('useFindAndModify', false);
 
 require('./models/user')
 require('./models/post')
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV == "production") {
     app.use(express.static('client/build'))
     const path = require('path')
     app.get("*", (req, res) => {
-        res.send(path.resolve(__dirname, 'client', 'build', 'index.html'))
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     })
 }
 
