@@ -133,7 +133,7 @@ function Home() { //function for dynamically creating posts
                             {/* //in the below line is the very important logic to dynamically view other user's profile
                             if the logged in user clicks on the other user's  name then he will redirect to other user's profile
                             and if the logged in user clicks on his name than he will redirect to his profile */}
-                            <h5 style={{ padding: "5px" }}><Link to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : "/profile"}
+                            <h5 style={{ padding: "1rem" }}><Link className="name-link" to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : "/profile"}
                             >{item.postedBy.name}</Link> {/* dynamically passing name of the user who created the post */}
 
                                 {item.postedBy._id == state._id //logic for showing delete post icon to only to the user who created it, 
@@ -160,30 +160,31 @@ function Home() { //function for dynamically creating posts
 
 
                                 {/* //dynamically passing the number of likes, by the length of likes array that is present in every item */}
-                                <h6>{item.likes.length} Likes</h6>
+                                <h6 className="post-likes">{item.likes.length} Likes</h6>
                                 {/* dynamically passing title and body of the post created by the user */}
-                                <h6>{item.title}</h6>
-                                <p>{item.body}</p>
+                                <h6 className="post-title">{item.title}</h6>
+                                <p className="post-body">{item.body}</p>
 
                                 {/* //logic for dynamically showing comments on the post */}
-                                {
-                                    item.comments.map(record => { //mapping the comments array in the item
-                                        return (
+                                <div style={{ marginBottom: "1.5rem" }}>
+                                    {
+                                        item.comments.map(record => { //mapping the comments array in the item
+                                            return (
 
-                                            < h6 key={record._id} ><span style={{ fontWeight: "500" }}> <Link to={record.postedBy._id !== state._id ? `/profile/${record.postedBy._id}` : "/profile"}>{record.postedBy.name} </Link>- </span>{record.text} </h6>//this will return everytime a cooment is made, the comment text and user's name will be shown on the screen
-                                        )
-                                    })
-                                }
-
+                                                < h6 style={{ fontWeight: "500", fontSize: "1.5rem", marginTop: "1rem" }} key={record._id} ><span style={{ fontWeight: "500", fontSize: "1.75rem" }}> <Link to={record.postedBy._id !== state._id ? `/profile/${record.postedBy._id}` : "/profile"}>{record.postedBy.name} </Link>- </span>{record.text} </h6>//this will return everytime a cooment is made, the comment text and user's name will be shown on the screen
+                                            )
+                                        })
+                                    }
+                                </div>
                                 {/* //in the line below we are creating logic for dynamically post comments */}
                                 <form onSubmit={(e) => {
                                     e.preventDefault()
                                     makeComment(e.target[0].value, item._id) //on submit of the we will pass two values text and id, e.target[0].value refers to the comment posted by the user and item._id refers to the id
                                     e.target[0].value = ""
                                 }}>
-                                    <input type="text" placeholder="Add a comment" />
-                                    <button className="btn #4caf50 green" type="submit" name="action">Post Comment
-                                       <i className="material-icons right">send</i>
+                                    <input style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }} type="text" placeholder="Add a comment" />
+                                    <button className="btn commentbtn" type="submit" name="action" style={{ paddingLeft: "1rem", paddingRight: "1rem", paddingTop: "0rem", paddingBottom: "1.5rem" }}>
+                                        <i style={{ fontSize: "1.75rem" }} className="material-icons">send</i>
                                     </button>
                                 </form>
                             </div>

@@ -95,33 +95,34 @@ function Profile() { //function to dynamically show different user's profile, th
             { userProfile ? //if userProfile exists then below whole code will implement
 
 
-                <div style={{ maxWidth: "550px", margin: "0px auto" }}>
+                <div style={{ maxWidth: "55rem", margin: "0rem auto" }}>
                     <div style={{
                         display: "flex",
                         justifyContent: "space-around",
-                        margin: "18px 0px",
-                        borderBottom: "1px solid grey"
+                        margin: "1.8rem 0rem",
+                        borderBottom: "0.1rem solid grey"
+
                     }}>
                         <div>
-                            <img style={{ width: "160px", height: "160px", borderRadius: "80px" }}
+                            <img style={{ width: "15rem", height: "15rem", borderRadius: "8rem", marginBottom: "2rem" }}
                                 src={userProfile.user.pic}
                             />
                         </div>
                         <div>
                             {/* //dynamically passing the user name and user email using state option only if it exists */}
-                            <h4>{userProfile.user.name}</h4>
-                            <h5>{userProfile.user.email}</h5>
+                            <h4 style={{ fontSize: "2.75rem", fontWeight: "500", marginBottom: "2rem" }}>{userProfile.user.name}</h4>
+                            <h5 style={{ fontSize: "2rem", fontWeight: "500", marginBottom: "1.5rem" }}>{userProfile.user.email}</h5>
                             <div style={{ display: "flex", justifyContent: "space-between", width: "108%" }}>
                                 {/* //dynamically showing number of posts posted by the user  */}
-                                <h6>{userProfile.posts.length} Posts</h6>
+                                <h6 style={{ fontSize: "1.8rem", fontWeight: "500", marginRight: "0rem" }}>{userProfile.posts.length} Posts</h6>
                                 {/* //dynamically setting the followers and following array in profile */}
-                                <h6>{userProfile.user.followers.length} Followers</h6>
-                                <h6>{userProfile.user.following.length} Following</h6>
+                                <h6 style={{ fontSize: "1.8rem", fontWeight: "500", marginRight: "0rem" }}>{userProfile.user.followers.length} Followers</h6>
+                                <h6 style={{ fontSize: "1.8rem", fontWeight: "500", marginBottom: "2rem" }}>{userProfile.user.following.length} Following</h6>
                             </div>
                             {showfollow ? //if showfollow is false, then we will see the follow button
-                                <button style={{ margin: "10px" }} className="btn waves-effect waves-light" onClick={() => followUser()}>Follow</button>
+                                <button style={{ fontSize: "1.5rem", padding: "1rem", paddingTop: "0rem", marginBottom: "2rem" }} className="btn waves-effect waves-light" onClick={() => followUser()}>Follow</button>
                                 : //and if showfollow is true, then we will see the unfollow button
-                                <button style={{ margin: "10px" }} className="btn waves-effect waves-light" onClick={() => unfollowUser()}>Unfollow</button>
+                                <button style={{ fontSize: "1.5rem", padding: "1rem", paddingTop: "0rem", marginBottom: "2rem" }} className="btn waves-effect waves-light" onClick={() => unfollowUser()}>Unfollow</button>
                             }
                         </div>
                     </div>

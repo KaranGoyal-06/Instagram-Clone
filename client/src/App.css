@@ -1,34 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
 
+html {
+  font-size: 62.5%;
+}
+
+
+
+
+
 
 a{
   color: black !important;
 }
+
+
 
 .brand-logo, h2 {
   font-family: 'Grand Hotel', cursive;
 }
 
 .mycard{
-  margin-top: 30px;
+  margin-top: 3rem;
 }
 
 .auth-card{
-  padding: 20px;
+  padding: 2rem;
 text-align: center;
-max-width: 400px;
-margin: 10px auto;
+max-width: 40rem;
+margin: 1rem auto;
 }
 
 .input-field input[type=text]:focus {
-  border-bottom: 1px solid rgb(8,93,252) !important;
-  box-shadow: 0 1px 0 0 rgb(8, 93, 252) !important;
+  border-bottom: 0.1rem solid rgb(8,93,252) !important;
+  box-shadow: 0 0.1rem 0 0 rgb(8, 93, 252) !important;
 }
 
 .input-field input[type=password]:focus {
-  border-bottom: 1px solid rgb(8,93,252) !important;
-  box-shadow: 0 1px 0 0 rgb(8, 93, 252) !important;
+  border-bottom: 0.1rem solid rgb(8,93,252) !important;
+  box-shadow: 0 0.1rem 0 0 rgb(8, 93, 252) !important;
 }
+
+
+
 
 .gallery{
   display: flex;
@@ -38,19 +51,19 @@ margin: 10px auto;
 
 .item{
   width: 30%;
-  margin-top: 20px;
+  margin-top: 2rem;
 
 }
 
 .home-card{
-  max-width: 500px;
+  max-width: 80rem;
   height: max-content;
-  margin: 26px auto;
+  margin: 2.6rem auto;
 }
 
 #toast-container{
-  top: 20px !important;
-  right: 15px !important;
+  top: 4rem !important;
+  right: 3rem !important;
   left: auto !important;
 }
 
@@ -60,4 +73,95 @@ margin: 10px auto;
 
 .collection-item {
   width: 100%;
+}
+
+.name-link {
+ margin-bottom: 0rem;
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+
+.delete-icon {
+   padding: 0.8rem;
+   font-size: 2.5rem;
+}
+
+.post-title{
+  font-weight: 700;
+    font-size: 2rem;
+    
+}
+
+.post-body{
+  font-size: 1.75rem;
+  
+  margin-bottom: 2rem;
+}
+
+.post-likes{
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.lout{
+  margin: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.brand-logo{
+  margin-left: 2rem;
+  
+  
+}
+
+
+
+
+.createpost{
+  font-size: 3.5rem;
+}
+
+.login{
+  font-weight: 500;
+    font-size: 2rem;
+    margin-right: 0.5rem ;
+    
+}
+
+.logup{
+  font-weight: 500;
+    font-size: 2rem;
+    margin-right: 1rem ;
+    margin-left: 0.5rem;
+}
+
+@media(max-width: 500px){
+  html{
+    font-size: 50%;
+  }
+}
+
+
+@media(max-width: 525px){
+  html{
+    font-size: 50%;
+  }
+}
+
+@media(max-width: 425px){
+  html{
+    font-size: 40%;
+  }
+}
+
+@media(max-width: 350px){
+  html{
+    font-size: 35%;
+  }
+}
+
+@media(max-width: 325px){
+  html{
+    font-size: 30%;
+  }
 }

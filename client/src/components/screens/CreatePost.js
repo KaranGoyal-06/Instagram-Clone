@@ -64,24 +64,26 @@ function CreatePost() {
     return (
         <div className="card input-field"
             style={{
-                margin: "30px auto",
-                maxWidth: "500px",
-                padding: "20px",
+                margin: "8rem auto",
+                maxWidth: "80rem",
+                padding: "2rem",
                 textAlign: "center"
+
             }}
         >
-            <input type="text" placeholder="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
-            <input type="text" placeholder="body" value={body} onChange={(e) => setBody(e.target.value)}></input>
+            <h1 className="createpost">Create Post</h1>
+            <input style={{ fontSize: "1.5rem" }} type="text" placeholder="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+            <input style={{ fontSize: "1.5rem" }} type="text" placeholder="body" value={body} onChange={(e) => setBody(e.target.value)}></input>
             <div className="file-field input-field" >
                 <div className="btn">
-                    <span>Upload Image</span>
-                    <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                    <span style={{ fontSize: "1.5rem", padding: "1rem", paddingTop: "0rem" }}>Upload Image</span>
+                    <input style={{ fontSize: "1.5rem" }} type="file" onChange={(e) => setImage(e.target.files[0])} />
                 </div>
                 <div className="file-path-wrapper">
                     <input className="file-path validate" type="text" />
                 </div>
             </div>
-            <button className="btn waves-effect waves-light" onClick={() => postDetails()}>Submit Post</button>
+            <button style={{ fontSize: "1.5rem", padding: "1rem", paddingTop: "0rem" }} className="btn waves-effect waves-light" onClick={() => postDetails()}>Submit Post</button>
         </div>
     )
 }

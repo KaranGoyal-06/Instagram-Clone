@@ -44,15 +44,15 @@ function Login() {
 
     return (
         <div className="mycard">
-            <div className="card auth-card input-field">
-                <h2> Instagram</h2>
-                <input type="text" placeholder="email" value={email} onChange={(e) => SetEmail(e.target.value)} />
-                <input type="password" placeholder="password" value={password} onChange={(e) => SetPassword(e.target.value)} />
-                <button className="btn waves-effect waves-light" onClick={() => PostData()}>Login</button>
-                <h5>
+            <div className="card auth-card input-field" style={{ maxWidth: "80rem", marginTop: "8rem" }}>
+                <h2 style={{ fontSize: "5rem", marginBottom: "4rem" }}> Instagram</h2>
+                <input style={{ marginBottom: "3rem", fontSize: "1.5rem" }} type="text" placeholder="email" value={email} onChange={(e) => SetEmail(e.target.value)} />
+                <input style={{ marginBottom: "3rem", fontSize: "1.5rem" }} type="password" placeholder="password" value={password} onChange={(e) => SetPassword(e.target.value)} />
+                <button style={{ fontSize: "2rem", marginBottom: "1.5rem", padding: "1rem", paddingTop: "0rem" }} className="btn waves-effect waves-light" onClick={() => PostData()}>Login</button>
+                <h5 style={{ fontSize: "2rem", fontWeight: "500", marginBottom: "2rem" }}>
                     <Link to="/signup">New User?</Link>
                 </h5>
-                <h6>
+                <h6 style={{ fontSize: "1.5rem", fontWeight: "400" }}>
                     <Link to="/reset">Forgot Password?</Link>
                 </h6>
 

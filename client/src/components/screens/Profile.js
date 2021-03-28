@@ -68,10 +68,10 @@ function Profile() {
 
 
     return (
-        <div style={{ maxWidth: "550px", margin: "0px auto" }}>
+        <div style={{ maxWidth: "55rem", margin: "0rem auto" }}>
             <div style={{
-                margin: "18px 0px",
-                borderBottom: "1px solid grey"
+                margin: "1.5rem 0rem",
+                borderBottom: "0.1rem solid grey"
             }}>
                 <div style={{
                     display: "flex",
@@ -79,27 +79,27 @@ function Profile() {
 
                 }}>
                     <div>
-                        <img style={{ width: "160px", height: "160px", borderRadius: "80px" }}
+                        <img style={{ width: "15rem", height: "15rem", borderRadius: "8rem" }}
                             src={state ? state.pic : "loading"}
                         />
                     </div>
                     <div>
                         {/* //dynamically passing the user name using state option only if it exists */}
-                        <h4>{state ? state.name : "loading"}</h4>
-                        <h5>{state ? state.email : "loading"}</h5>
+                        <h4 className="profile-name" style={{ fontSize: "2.75rem", fontWeight: "500", marginBottom: "2rem" }}>{state ? state.name : "loading"}</h4>
+                        <h5 style={{ fontSize: "2rem", fontWeight: "500", marginBottom: "2rem" }}>{state ? state.email : "loading"}</h5>
                         <div style={{ display: "flex", justifyContent: "space-between", width: "108%" }}>
-                            <h6>{mypics.length} Posts</h6>
+                            <h6 style={{ fontSize: "1.8rem", fontWeight: "500", marginRight: "1rem" }}>{mypics.length} Posts</h6>
                             {/* //dynamically showing the no. of followers and following */}
-                            <h6>{state ? state.followers.length : "0"} Followers</h6>
-                            <h6>{state ? state.following.length : "0"} Following</h6>
+                            <h6 style={{ fontSize: "1.8rem", fontWeight: "500", marginRight: "1rem" }}>{state ? state.followers.length : "0"} Followers</h6>
+                            <h6 style={{ fontSize: "1.8rem", fontWeight: "500" }}>{state ? state.following.length : "0"} Following</h6>
                         </div>
 
                     </div>
                 </div>
                 {/* //element for uploading the image to update */}
-                <div className="file-field input-field" style={{ margin: "10px" }}>
+                <div className="file-field input-field" style={{ margin: "1rem" }}>
                     <div className="btn">
-                        <span>Update Image</span>
+                        <span style={{ fontSize: "1.5rem", padding: "1rem", paddingTop: "0rem" }}>Update Image</span>
                         <input type="file" onChange={(e) => updatePhoto(e.target.files[0])} />
                     </div>
                     <div className="file-path-wrapper">

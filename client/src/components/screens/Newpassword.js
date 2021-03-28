@@ -41,10 +41,10 @@ function Login() {
 
     return (
         <div className="mycard">
-            <div className="card auth-card input-field">
-                <h2> Instagram</h2>
+            <div className="card auth-card input-field" style={{ maxWidth: "70rem" }}>
+                <h2 style={{ fontSize: "5rem", marginBottom: "2rem" }}> Instagram</h2>
 
-                <input type="password" placeholder="Enter New Password" value={password} onChange={(e) => SetPassword(e.target.value)} />
+                <input style={{ marginBottom: "2rem" }} type="password" placeholder="Enter New Password" value={password} onChange={(e) => SetPassword(e.target.value)} />
                 <button className="btn waves-effect waves-light" onClick={() => PostData()}>Update Password</button>
 
             </div>

@@ -43,9 +43,9 @@ function Reset() {
 
     return (
         <div className="mycard">
-            <div className="card auth-card input-field">
-                <h2> Instagram</h2>
-                <input type="text" placeholder="email" value={email} onChange={(e) => SetEmail(e.target.value)} />
+            <div className="card auth-card input-field" style={{ maxWidth: "70rem" }}>
+                <h2 style={{ fontSize: "5rem", marginBottom: "2rem" }}> Instagram</h2>
+                <input style={{ marginBottom: "2rem" }} type="text" placeholder="email" value={email} onChange={(e) => SetEmail(e.target.value)} />
 
                 <button className="btn waves-effect waves-light" onClick={() => PostData()}>Reset Password</button>
 

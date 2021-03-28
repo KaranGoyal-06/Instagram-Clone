@@ -74,14 +74,14 @@ function Signup() {
 
     return (
         <div className="mycard">
-            <div className="card auth-card input-field">
-                <h2> Instagram</h2>
-                <input type="text" placeholder="name" value={name} onChange={(e) => SetName(e.target.value)} />
-                <input type="text" placeholder="email" value={email} onChange={(e) => SetEmail(e.target.value)} />
-                <input type="password" placeholder="password" value={password} onChange={(e) => SetPassword(e.target.value)} />
+            <div className="card auth-card input-field" style={{ maxWidth: "80rem", marginTop: "7rem" }}>
+                <h2 style={{ fontSize: "5rem", marginBottom: "2rem" }}> Instagram</h2>
+                <input style={{ marginBottom: "1rem", fontSize: "1.5rem" }} type="text" placeholder="name" value={name} onChange={(e) => SetName(e.target.value)} />
+                <input style={{ marginBottom: "1rem", fontSize: "1.5rem" }} type="text" placeholder="email" value={email} onChange={(e) => SetEmail(e.target.value)} />
+                <input style={{ marginBottom: "1rem", fontSize: "1.5rem" }} type="password" placeholder="password" value={password} onChange={(e) => SetPassword(e.target.value)} />
                 <div className="file-field input-field" >
                     <div className="btn">
-                        <span>Upload Image</span>
+                        <span style={{ padding: "1rem", paddingTop: "0rem", fontSize: "1.5rem" }}>Upload Image</span>
                         <input type="file" onChange={(e) => setImage(e.target.files[0])} />
                     </div>
                     <div className="file-path-wrapper">
@@ -89,13 +89,13 @@ function Signup() {
                     </div>
                 </div>
 
-                <button className="btn waves-effect waves-light" onClick={() => PostData()}>Signup</button>
+                <button style={{ fontSize: "2rem", padding: "1rem", paddingTop: "0rem" }} className="btn waves-effect waves-light" onClick={() => PostData()}>Signup</button>
                 {/* //calling the postdata function on click of button */}
-                <h5>
+                <h5 style={{ fontWeight: "500", fontSize: "1.75rem" }}>
                     <Link to="/signin">Already have an account?</Link>
                 </h5>
             </div>
-        </div>
+        </div >
     )
 }
 
