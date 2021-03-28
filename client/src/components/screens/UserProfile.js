@@ -2,37 +2,37 @@ import React, { useEffect, useState, useContext } from 'react'
 import { UserContext } from '../../App'
 import { useParams } from 'react-router-dom'
 
-function Profile() { //function to dynamically show different user's profile, the backend logic is in routes folder in user.js in server
-    const [userProfile, setProfile] = useState(null) //useState hook to dynamically set profile of different users
+function Profile() {
+    const [userProfile, setProfile] = useState(null)
 
-    const { state, dispatch } = useContext(UserContext) //destructuring state & dispatch that we passed in the UserContext.Provider as the value in app.js
-    //state contains all the details of user when he is logged in and is null when he is not
+    const { state, dispatch } = useContext(UserContext)
 
-    const { userid } = useParams() //accessing userid from params using useParams hook
-    const [showfollow, setShowFollow] = useState(state ? !state.following.includes(userid) : true) //useState hook for changing follow button from follow to unfollow or vice versa
+
+    const { userid } = useParams()
+    const [showfollow, setShowFollow] = useState(state ? !state.following.includes(userid) : true)
 
 
     useEffect(() => {
-        fetch(`/profile/${userid}`, {  //get request for fetching data stored in database regarding all the posts posted by the user and the user to show on the /profile/userid route
+        fetch(`/profile/${userid}`, {
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem("jwt") //passing token as user can only create post when signed in
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
         }).then(res => res.json())
             .then(result => {
                 //console.log(result)
-                setProfile(result) //setting profile to the obtatined object of result  containing info about all the posts and the user
+                setProfile(result)
             })
-    }, []) //passing empty array in the dependency array , so that hook renders in the mounting phase 
+    }, [])
 
 
-    const followUser = () => { //function for dynamically implementing the follow and following in the UI, 
-        fetch('/follow', { //put request to /follow route defined in user.js in server side
+    const followUser = () => {
+        fetch('/follow', {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
-            body: JSON.stringify({ //sending the id of the user which is to followed to the /follow route.
+            body: JSON.stringify({
                 followId: userid
             })
         }).then(res => res.json())
@@ -40,14 +40,14 @@ function Profile() { //function to dynamically show different user's profile, th
                 //console.log(data)
                 dispatch({ type: "UPDATE", payload: { following: data.following, followers: data.followers } }) //dispatching the updated following and followers array payload to the userReducer.js
                 localStorage.setItem("user", JSON.stringify(data))
-                setProfile((prevState) => {//setting the state when user followed some other user
+                setProfile((prevState) => {
 
-                    return { //we are basically want to get the id of the following person to the followers array of followed user
-                        //for this purpose as every entry is either object or array, we have to use spread operator repeatedly to merge states
-                        ...prevState, //spreading the previous state
+                    return {
+
+                        ...prevState,
                         user: {
-                            ...prevState.user, //spreading the previous state.user
-                            followers: [...prevState.user.followers, data._id] //spreading the previous state.user.followers and setting the id in followers array
+                            ...prevState.user,
+                            followers: [...prevState.user.followers, data._id]
                         }
                     }
                 })
@@ -57,29 +57,29 @@ function Profile() { //function to dynamically show different user's profile, th
     }
 
 
-    const unfollowUser = () => { //function for dynamically implementing the unfollow and following in the UI, 
-        fetch('/unfollow', { //put request to /unfollow route defined in user.js in server side
+    const unfollowUser = () => {
+        fetch('/unfollow', {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
-            body: JSON.stringify({ //sending the id of the user which is to unfollowed to the /unfollow route.
+            body: JSON.stringify({
                 unfollowId: userid
             })
         }).then(res => res.json())
             .then(data => {
 
-                dispatch({ type: "UPDATE", payload: { following: data.following, followers: data.followers } }) //dispatching the updated following and followers array payload to the userReducer.js
+                dispatch({ type: "UPDATE", payload: { following: data.following, followers: data.followers } })
                 localStorage.setItem("user", JSON.stringify(data))
-                setProfile((prevState) => {//setting the state when user unfollowed some other user
-                    const newFollower = prevState.user.followers.filter(item => item !== data._id) //creating a newfollower array which contain the id of all the follower except the who is unfollowing the current user
+                setProfile((prevState) => {
+                    const newFollower = prevState.user.followers.filter(item => item !== data._id)
                     return {
-                        //as every entry is either object or array, we have to use spread operator repeatedly to merge states
-                        ...prevState, //spreading the previous state
+
+                        ...prevState,
                         user: {
-                            ...prevState.user, //spreading the previous state.user
-                            followers: newFollower //setting the followers array as the newFollower array
+                            ...prevState.user,
+                            followers: newFollower
                         }
                     }
                 })
@@ -92,7 +92,7 @@ function Profile() { //function to dynamically show different user's profile, th
 
     return (
         <>
-            { userProfile ? //if userProfile exists then below whole code will implement
+            { userProfile ?
 
 
                 <div style={{ maxWidth: "55rem", margin: "0rem auto" }}>
@@ -109,7 +109,7 @@ function Profile() { //function to dynamically show different user's profile, th
                             />
                         </div>
                         <div>
-                            {/* //dynamically passing the user name and user email using state option only if it exists */}
+
                             <h4 style={{ fontSize: "2.75rem", fontWeight: "500", marginBottom: "2rem" }}>{userProfile.user.name}</h4>
                             <h5 style={{ fontSize: "2rem", fontWeight: "500", marginBottom: "1.5rem" }}>{userProfile.user.email}</h5>
                             <div style={{ display: "flex", justifyContent: "space-between", width: "108%" }}>
@@ -129,7 +129,7 @@ function Profile() { //function to dynamically show different user's profile, th
 
                     <div className="gallery">
                         {
-                            userProfile.posts.map(item => { //using map method to dynamically assign properties to each element, item refres to data and data refers to reult.mypost array that contain all info about posts
+                            userProfile.posts.map(item => {
                                 return (
                                     <img key={item._id} className="item" src={item.photo} alt={item.title}></img>
                                 )
@@ -139,7 +139,7 @@ function Profile() { //function to dynamically show different user's profile, th
                     </div>
                 </div>
 
-                //if userProfile does not exists then below  code will implement showing Loding
+
                 : <h2>Loading Profile</h2>}
 
         </>

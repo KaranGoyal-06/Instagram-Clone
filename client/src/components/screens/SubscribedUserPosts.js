@@ -4,23 +4,23 @@ import { UserContext } from '../../App'
 import { Link } from 'react-router-dom'
 
 
-function Home() { //function for dynamically creating posts
-    const [data, setData] = useState([]) //hook for setting post data in an array
-    const { state, dispatch } = useContext(UserContext) //state has all the details of the user who is logged in
+function Home() {
+    const [data, setData] = useState([])
+    const { state, dispatch } = useContext(UserContext)
 
     useEffect(() => {
-        fetch('/getsubpost', { //get request for fetching data stored in database regarding all the posts using /allpost route in post.js in server
+        fetch('/getsubpost', {
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem("jwt") //passing token as user can only create post when signed in
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
         }).then(res => res.json())
             .then(result => {
                 //console.log(result)
-                setData(result.posts) //setting data to the obtatined array of result.posts containing info about all the posts
+                setData(result.posts)
             })
     }, [])
 
-    const likePost = (id) => { //passing the post id to the /like route in the backend by sending a put request
+    const likePost = (id) => {
         fetch('/like', {
             method: "put",
             headers: {
@@ -33,11 +33,11 @@ function Home() { //function for dynamically creating posts
         }).then(res => res.json())
             .then(result => {
                 //console.log(result)
-                const newData = data.map(item => {//function for updating like state
+                const newData = data.map(item => {
                     if (item._id === result._id) {
-                        return result //if both the id's are equal will return the updated record
+                        return result
                     } else {
-                        return item //otherwise will return the old record
+                        return item
                     }
                 })
                 setData(newData)
@@ -60,11 +60,11 @@ function Home() { //function for dynamically creating posts
         }).then(res => res.json())
             .then(result => {
                 //console.log(result)
-                const newData = data.map(item => {//function for updating like state
+                const newData = data.map(item => {
                     if (item._id === result._id) {
-                        return result //if both the id's are equal will return the updated record
+                        return result
                     } else {
-                        return item //otherwise will return the old record
+                        return item
                     }
                 })
                 setData(newData)
@@ -74,7 +74,7 @@ function Home() { //function for dynamically creating posts
     }
 
 
-    const makeComment = (text, postId) => { //function for passing the post id and text to the /comment route in the backend by sending a put request
+    const makeComment = (text, postId) => {
         fetch('/comment', {
             method: "put",
             headers: {
@@ -88,11 +88,11 @@ function Home() { //function for dynamically creating posts
         }).then(res => res.json())
             .then(result => {
                 // console.log(result)
-                const newData = data.map(item => {//function for updating comment state
+                const newData = data.map(item => {
                     if (item._id === result._id) {
-                        return result //if both the id's are equal will return the updated record
+                        return result
                     } else {
-                        return item //otherwise will return the old record
+                        return item
                     }
                 })
                 setData(newData)
@@ -111,10 +111,10 @@ function Home() { //function for dynamically creating posts
         }).then(res => res.json())
             .then(result => {
                 //console.log(result)
-                const newData = data.filter(item => { //filtering out every item or post 
-                    return item._id !== result._id //in this filter will return all the items whose id is not equal to id of the post to be deleted i.e will exclude the one post to be deleted and will show rest of the posts hence delete functionality implemented 
+                const newData = data.filter(item => {
+                    return item._id !== result._id
                 })
-                setData(newData)//will set the data as the new filtered out array of the posts 
+                setData(newData)
                 M.toast({ html: "Post Deleted", classes: "#2e7d32 green darken-3" })
             })
     }
@@ -127,39 +127,37 @@ function Home() { //function for dynamically creating posts
     return (
         <div className="home">
             {
-                data.map(item => { //using map method to dynamically assign properties to each element, item refres to data and data refers to reult.posts array that contain all info about posts
+                data.map(item => {
                     return (
                         <div className="card home-card" key={item._id}>
-                            {/* //in the below line is the very important logic to dynamically view other user's profile
-                            if the logged in user clicks on the other user's  name then he will redirect to other user's profile
-                            and if the logged in user clicks on his name than he will redirect to his profile */}
-                            <h5 style={{ padding: "1rem" }}><Link className="name-link" to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : "/profile"}
-                            >{item.postedBy.name}</Link> {/* dynamically passing name of the user who created the post */}
 
-                                {item.postedBy._id == state._id //logic for showing delete post icon to only to the user who created it, 
-                                    && <i className="material-icons" style={{ //delete icon will show if the logic is true
+                            <h5 style={{ padding: "1rem" }}><Link className="name-link" to={item.postedBy._id !== state._id ? `/profile/${item.postedBy._id}` : "/profile"}
+                            >{item.postedBy.name}</Link>
+
+                                {item.postedBy._id == state._id
+                                    && <i className="material-icons" style={{
                                         float: "right"
                                     }}
-                                        onClick={() => deletePost(item._id)} //implementing the onclick functionality on delete icon, it will refer to deletePost function and will also pass _id
+                                        onClick={() => deletePost(item._id)}
                                     >delete</i>
                                 }</h5>
                             <div className="card-image">
-                                {/* dynamically passing photo url of the photo uploaded by the user who created the post */}
+
                                 <img src={item.photo}></img>
                             </div>
                             <div className="card-content">
                                 <i className="material-icons" style={{ color: "red" }}>favorite</i>
-                                {/* //in the line below adding css materialize icons for like and unlike */}
-                                {item.likes.includes(state._id) //in this we are adding a logic to not to show like icon to the user who has already liked a post and unlike icon and unlike icon to user who has already disliked the post
-                                    ? <i className="material-icons" //so in this if likes array contain the user id that means user has already liked the post, so they will only be shown the dislike icon
+
+                                {item.likes.includes(state._id)
+                                    ? <i className="material-icons"
                                         onClick={() => { unlikePost(item._id) }}
                                     >thumb_down</i>
-                                    : <i className="material-icons" //and in this if likes array  not contain the user id that means user has not liked the post, so they will only be shown the like icon
+                                    : <i className="material-icons"
                                         onClick={() => { likePost(item._id) }}
                                     >thumb_up</i>}
 
 
-                                {/* //dynamically passing the number of likes, by the length of likes array that is present in every item */}
+
                                 <h6 className="post-likes">{item.likes.length} Likes</h6>
                                 {/* dynamically passing title and body of the post created by the user */}
                                 <h6 className="post-title">{item.title}</h6>
@@ -179,7 +177,7 @@ function Home() { //function for dynamically creating posts
                                 {/* //in the line below we are creating logic for dynamically post comments */}
                                 <form onSubmit={(e) => {
                                     e.preventDefault()
-                                    makeComment(e.target[0].value, item._id) //on submit of the we will pass two values text and id, e.target[0].value refers to the comment posted by the user and item._id refers to the id
+                                    makeComment(e.target[0].value, item._id)
                                     e.target[0].value = ""
                                 }}>
                                     <input style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }} type="text" placeholder="Add a comment" />

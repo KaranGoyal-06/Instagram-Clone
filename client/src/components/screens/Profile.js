@@ -3,39 +3,38 @@ import React, { useEffect, useState, useContext } from 'react'
 import { UserContext } from '../../App'
 
 function Profile() {
-    const [mypics, setPics] = useState([]) //useState hook to dynamically set images in the profile section
-    const { state, dispatch } = useContext(UserContext) //destructuring state & dispatch that we passed in the UserContext.Provider as the value in app.js
-    //state contains all the details of user when he is logged in and is null when he is not
-    const [image, setImage] = useState("") //ustate hook for setting the image when user updates the pic
+    const [mypics, setPics] = useState([])
+    const { state, dispatch } = useContext(UserContext)
 
+    const [image, setImage] = useState("")
 
 
     useEffect(() => {
-        fetch('/mypost', {  //get request for fetching data stored in database regarding all the posts posted by logged in user using /mypost route in post.js in server
+        fetch('/mypost', {
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem("jwt") //passing token as user can only create post when signed in
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
         }).then(res => res.json())
             .then(result => {
                 //console.log(result.mypost)
-                setPics(result.mypost) //setting data to the obtatined array of result.mypost containing info about all the posts
+                setPics(result.mypost)
             })
-    }, []) //passing empty array in the dependency array , so that hook renders in the mounting phase 
+    }, [])
 
 
-    useEffect(() => {//useeffect hook for  updating the image, it will run only when image exists 
+    useEffect(() => {
 
         if (image) {
-            const data = new FormData() //using formData and fetch(uploading a file) for image uploading
-            data.append("file", image) //appending the type of file to upload i.e image
-            data.append("upload_preset", "insta-clone") //upload preset that we created in cloudinary
-            data.append("cloud_name", "dxh5wpled") //our cloudinary cloud name
-            fetch("https://api.cloudinary.com/v1_1/dxh5wpled/image/upload", { //URL to be requested is API base URL/image/upload present on home page of cloudinary 
+            const data = new FormData()
+            data.append("file", image)
+            data.append("upload_preset", "insta-clone")
+            data.append("cloud_name", "dxh5wpled")
+            fetch("https://api.cloudinary.com/v1_1/dxh5wpled/image/upload", {
                 method: "post",
                 body: data
             })
                 .then(res => res.json())
-                .then(data => { //it will return the object containing all the details of oue uploaded image like uploaded image's cloudinary URL
+                .then(data => {
 
                     fetch('/updatepic', {
                         method: "put",
@@ -49,8 +48,8 @@ function Profile() {
                     }).then(res => res.json())
                         .then(result => {
                             //console.log(result)
-                            localStorage.setItem("user", JSON.stringify({ ...state, pic: result.pic }))//changing the pic url in local storage
-                            dispatch({ type: "UPDATEPIC", payload: result.pic })//dispatching an action with payload of uploaded pic url
+                            localStorage.setItem("user", JSON.stringify({ ...state, pic: result.pic }))
+                            dispatch({ type: "UPDATEPIC", payload: result.pic })
                         })
                 })
                 .catch(err => {
@@ -61,8 +60,7 @@ function Profile() {
 
 
     const updatePhoto = (file) => {
-        setImage(file) //setting the image to the uploaded file 
-
+        setImage(file)
     }
 
 
@@ -109,7 +107,7 @@ function Profile() {
             </div>
             <div className="gallery">
                 {
-                    mypics.map(item => { //using map method to dynamically assign properties to each element, item refres to data and data refers to reult.mypost array that contain all info about posts
+                    mypics.map(item => {
                         return (
                             <img key={item._id} className="item" src={item.photo} alt={item.title}></img>
                         )

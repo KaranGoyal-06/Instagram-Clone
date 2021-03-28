@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema.Types
 
-const postSchema = new mongoose.Schema({ //creating schema for the new posts created by user in the app
+const postSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -11,20 +11,20 @@ const postSchema = new mongoose.Schema({ //creating schema for the new posts cre
         required: true
     },
     photo: {
-        type: String, //photo URL
+        type: String,
         required: true
     },
     likes: [{
-        type: ObjectId, //referring to the User model 
+        type: ObjectId,
         ref: "User"
     }],
     comments: [{
-        text: String, // comment text is of type string
+        text: String,
         postedBy: { type: ObjectId, ref: "User" }
     }],
 
     postedBy: {
-        type: ObjectId, //referring to the User model 
+        type: ObjectId,
         ref: "User"
     }
 

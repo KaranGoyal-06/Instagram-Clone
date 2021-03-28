@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    resetToken: String,//for forgot password option
+    resetToken: String,
     expireToken: Date,
     pic: {
         type: String,

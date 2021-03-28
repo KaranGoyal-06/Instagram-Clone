@@ -4,17 +4,17 @@ export const reducer = (state, action) => {
     if (action.type === "USER") {
         return action.payload
     }
-    if (action.type === "CLEAR") { //if the logout button will clicked, this will implement, it will simply return the state as null.
+    if (action.type === "CLEAR") {
         return null
     }
-    if (action.type === "UPDATE") { // it is action for following other users, it will update the follwers and following array on every click 
+    if (action.type === "UPDATE") {
         return {
             ...state,
             followers: action.payload.followers,
             following: action.payload.following
         }
     }
-    if (action.type === "UPDATEPIC") { //when profile pic is updated
+    if (action.type === "UPDATEPIC") {
         return {
             ...state,
             pic: action.payload

@@ -1,13 +1,13 @@
 const express = require('express')
-const router = express.Router() //if not working in app.js then we need to use router
+const router = express.Router()
 const mongoose = require('mongoose')
-const requireLogin = require('../middleware/requireLogin') // importing middleware
+const requireLogin = require('../middleware/requireLogin')
 const Post = mongoose.model("Post")
 
-router.get('/allpost', requireLogin, (req, res) => { //route for showing all posts i.e Home Page
-    Post.find() //finding all posts using Post model
-        .populate('postedBy', '_id name') //populating the postedBy on populating it will show all the details like name, emali, password and id when requested is made but we only want name and _id to be shown that's why we are passing these two in the second arguement
-        .populate('comments.postedBy', '_id name')//also populating the comments array
+router.get('/allpost', requireLogin, (req, res) => {
+    Post.find()
+        .populate('postedBy', '_id name')
+        .populate('comments.postedBy', '_id name')
         .sort('-createdAt')
         .then(posts => {
             res.json({ posts: posts })
@@ -17,11 +17,11 @@ router.get('/allpost', requireLogin, (req, res) => { //route for showing all pos
         })
 })
 
-router.get('/mypost', requireLogin, (req, res) => { //route for showing all posts created by a signed in user & also passing the middleware requireLogin because then only we will able to access req.user._id used in next line of code.
-    Post.find({ postedBy: req.user._id }) //finding the posts in which the _id is of the signed in user's.
+router.get('/mypost', requireLogin, (req, res) => {
+    Post.find({ postedBy: req.user._id })
         .populate('postedBy', '_id name')
         .then(myposts => {
-            res.json({ mypost: myposts }) //showing all the posts  created by a signed in user
+            res.json({ mypost: myposts })
         })
         .catch(err => {
             console.log(err)
@@ -29,8 +29,8 @@ router.get('/mypost', requireLogin, (req, res) => { //route for showing all post
 })
 
 
-router.get('/getsubpost', requireLogin, (req, res) => { //route for showing all the posts of the users, the logged in user is following 
-    Post.find({ postedBy: { $in: req.user.following } }) // finding the posts where the postedBy comes in the following array 
+router.get('/getsubpost', requireLogin, (req, res) => {
+    Post.find({ postedBy: { $in: req.user.following } })
         .populate("postedBy", "_id name")
         .populate("comments.postedBy", "_id name")
         .sort('-createdAt')
@@ -43,35 +43,35 @@ router.get('/getsubpost', requireLogin, (req, res) => { //route for showing all 
 })
 
 
-router.post('/createpost', requireLogin, (req, res) => { // route for creating a post when user is signed in
-    const { title, body, pic } = req.body //destructuring title, body and the url of the pic uploaded by the client
+router.post('/createpost', requireLogin, (req, res) => {
+    const { title, body, pic } = req.body
     if (!title || !body || !pic) {
         return res.status(422).json({ error: "Please add all the fields" })
     }
-    req.user.password = undefined //the post model created below will also show the user's password, so we are preventing it by making password undefined
+    req.user.password = undefined
     const post = new Post({
-        title: title, //capturing the values of title, body, pic's url input by user in post model
+        title: title,
         body: body,
-        photo: pic, //saving the photo url to photo key as per our schema
-        postedBy: req.user //req.user will contain name, email, password of the user, we defined it in the middleware
+        photo: pic,
+        postedBy: req.user
 
     })
-    post.save().then(result => { // saving the post  to the mongo database
-        res.json({ post: result }) // the result will contain all the details of the post like title, body, user's name, email, password
+    post.save().then(result => {
+        res.json({ post: result })
     })
         .catch(err => {
             console.log(err)
         })
 })
 
-router.put('/like', requireLogin, (req, res) => { //route to send a put request everytime a user likes a post, put request is used for updating purpose
-    Post.findByIdAndUpdate(req.body.postId, { // finding the post in the Post model using the post id that will be passed from the front end 
-        $push: { likes: req.user._id } //after finding the post we will update likes array by pushing the user id of the logged in user everytime a post is liked
+router.put('/like', requireLogin, (req, res) => {
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push: { likes: req.user._id }
     }, {
-        new: true //we are adding this so that mongo db will send the updated record everytime a user likes post
-    }).populate('postedBy', '_id name') //also populating the post postedBy
-        .populate("comments.postedBy", "_id name") //populating the comments postedBy on populating it will show all the details like name, emali, password and id when requested is made but we only want name and _id to be shown that's why we are passing these two in the second arguement
-        .exec((err, result) => { //executing the findByIdAndUpdate query results
+        new: true
+    }).populate('postedBy', '_id name')
+        .populate("comments.postedBy", "_id name")
+        .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err })
             } else {
@@ -80,14 +80,14 @@ router.put('/like', requireLogin, (req, res) => { //route to send a put request 
         })
 })
 
-router.put('/unlike', requireLogin, (req, res) => { //route to send a put request everytime a user unlikes a post, put request is used for updating purpose
-    Post.findByIdAndUpdate(req.body.postId, { // finding the post in the Post model using the post id that will be passed from the front end 
-        $pull: { likes: req.user._id } //after finding the post we will update likes array by pulling the user id of the logged in user everytime a post is unliked
+router.put('/unlike', requireLogin, (req, res) => {
+    Post.findByIdAndUpdate(req.body.postId, {
+        $pull: { likes: req.user._id }
     }, {
-        new: true //we are adding this so that mongo db will send the updated record everytime a user likes post
-    }).populate('postedBy', '_id name') //also populating the post postedBy
-        .populate("comments.postedBy", "_id name")//populating the comments postedBy on populating it will show all the details like name, emali, password and id when requested is made but we only want name and _id to be shown that's why we are passing these two in the second arguement
-        .exec((err, result) => { //executing the findByIdAndUpdate query results
+        new: true
+    }).populate('postedBy', '_id name')
+        .populate("comments.postedBy", "_id name")
+        .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err })
             } else {
@@ -96,19 +96,19 @@ router.put('/unlike', requireLogin, (req, res) => { //route to send a put reques
         })
 })
 
-router.put('/comment', requireLogin, (req, res) => { //route to send a put request everytime a user makes a comment, put request is used for updating purpose
+router.put('/comment', requireLogin, (req, res) => {
     const comment = {
-        text: req.body.text, //this will be passed by the user in the frontend
+        text: req.body.text,
         postedBy: req.user._id
     }
-    Post.findByIdAndUpdate(req.body.postId, { // finding the post in the Post model using the post id that will be passed from the front end 
-        $push: { comments: comment } //after finding the post we will update comments array by pushing the comment object of the logged in user everytime a comment is made
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push: { comments: comment }
     }, {
-        new: true //we are adding this so that mongo db will send the updated record everytime a user comments on a post
+        new: true
     })
-        .populate("comments.postedBy", "_id name") //populating the comments postedBy on populating it will show all the details like name, emali, password and id when requested is made but we only want name and _id to be shown that's why we are passing these two in the second arguement
-        .populate('postedBy', '_id name') //also populating the post postedBy
-        .exec((err, result) => { //executing the findByIdAndUpdate query results
+        .populate("comments.postedBy", "_id name")
+        .populate('postedBy', '_id name')
+        .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err })
             } else {
@@ -117,17 +117,17 @@ router.put('/comment', requireLogin, (req, res) => { //route to send a put reque
         })
 })
 
-router.delete('/deletepost/:postId', requireLogin, (req, res) => { //route for deleting the post by sending delete request with postId as params
-    Post.findOne({ _id: req.params.postId }) //finding the post by the id passed in the params 
+router.delete('/deletepost/:postId', requireLogin, (req, res) => {
+    Post.findOne({ _id: req.params.postId })
         .populate('postedBy', '_id name')
         .exec((err, post) => {
-            if (err || !post) { //will implement if error or post is not present
+            if (err || !post) {
                 return res.status(422).json({ error: err })
             }
-            if (post.postedBy._id.toString() === req.user._id.toString()) { //logic for, only the user who has created a post can delete it also converting the id's into string
-                post.remove() //will remove the post from database not from client UI
+            if (post.postedBy._id.toString() === req.user._id.toString()) {
+                post.remove()
                     .then(result => {
-                        res.json(result)//will return the deleted post
+                        res.json(result)
                     }).catch(err => {
                         console.log(err)
                     })

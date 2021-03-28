@@ -19,15 +19,15 @@ const Routing = () => {
   const history = useHistory()
   const { state, dispatch } = useContext(UserContext)
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user")) //accessing the user details that are available when user is logged in and prsing them from JSON to javascript objects
-    if (user) { //if the user is not empty i.e he is logged in then 
+    const user = JSON.parse(localStorage.getItem("user"))
+    if (user) {
       dispatch({ type: "USER", payload: user })
 
-    } else { // and if user is not logged in then push him to sign in page
+    } else {
       if (!history.location.pathname.startsWith('/reset'))
         history.push('/signin')
     }
-  }, []) //we want this routing function to be implemented only once i.e on mounting that's why we are passing an empty array 
+  }, [])
 
   return (
     <Switch>
@@ -63,10 +63,10 @@ const Routing = () => {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState) //destructuring useReducer hook by passing in reducer and initial state and getting state and dispatch in return
+  const [state, dispatch] = useReducer(reducer, initialState)
   return (
     <UserContext.Provider value={{ state: state, dispatch: dispatch }}>
-      {/* // every component should be wrapped under the browser router to access different routes */}
+
       <BrowserRouter>
         <Navbar />
         <Routing />

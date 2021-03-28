@@ -4,25 +4,25 @@ import { useHistory } from 'react-router-dom'
 
 function CreatePost() {
     const history = useHistory()
-    const [title, setTitle] = useState("") //ustate hook for setting the title value when post is created by the user
-    const [body, setBody] = useState("") //ustate hook for setting the body value when post is created by the user
-    const [image, setImage] = useState("") //ustate hook for setting the image file when post is created by the user
+    const [title, setTitle] = useState("")
+    const [body, setBody] = useState("")
+    const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
 
 
-    const postDetails = () => { //creating a function for uploading our image and creating our post
+    const postDetails = () => {
         //Part 1 -> writing code to upload our image to cloudinary 
-        const data = new FormData() //using formData and fetch(uploading a file) for image uploading
-        data.append("file", image) //appending the type of file to upload i.e image
-        data.append("upload_preset", "insta-clone") //upload preset that we created in cloudinary
-        data.append("cloud_name", "dxh5wpled") //our cloudinary cloud name
-        fetch("https://api.cloudinary.com/v1_1/dxh5wpled/image/upload", { //URL to be requested is API base URL/image/upload present on home page of cloudinary 
+        const data = new FormData()
+        data.append("file", image)
+        data.append("upload_preset", "insta-clone")
+        data.append("cloud_name", "dxh5wpled")
+        fetch("https://api.cloudinary.com/v1_1/dxh5wpled/image/upload", {
             method: "post",
             body: data
         })
             .then(res => res.json())
-            .then(data => { //it will return the object containing all the details of oue uploaded image like uploaded image's cloudinary URL
-                setUrl(data.url) //setting the url as the url of the uploaded image
+            .then(data => {
+                setUrl(data.url)
             })
             .catch(err => {
                 console.log(err)
@@ -30,34 +30,32 @@ function CreatePost() {
     }
 
 
-    useEffect(() => {//we are putting this part of code in useEffect hook because it will take some time to get 1st part of code to be implemented
-        //So this part of code will implement only after url has been setted by the setUrl method
-        //Part 2 -> writing code to send a post request to /createpost and also uploading our image from cloudinary's Url
-        if (url) { //code will only run when there is URL
-            fetch("/createpost", { //using fetch API to post the post's data to our createpost route created in the server folder in auth.js
-                method: "post", //sending the post request
+    useEffect(() => {
+        if (url) {
+            fetch("/createpost", {
+                method: "post",
                 headers: {
-                    "Content-Type": "application/json", //the data to be posted in the json format
-                    "Authorization": "Bearer " + localStorage.getItem("jwt") //passing the token in the header to acces the protected routes
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("jwt")
                 },
-                body: JSON.stringify({ //will convert the existing data entered by the user to the json format, the content type in header should match the body type
+                body: JSON.stringify({
                     title: title,
                     body: body,
-                    pic: url //uploading our image from cloudinary's Url
+                    pic: url
                 })
-            }).then(res => res.json()) //it parses the json response from fetch into native javascript objects
-                .then(data => { // data include javascript objects parsed from res.json
+            }).then(res => res.json())
+                .then(data => {
                     if (data.error) {
-                        M.toast({ html: data.error, classes: "#d50000 red accent-4" }) //creating toast to display error on client UI using materialize and in the second arguement changing the color
-                    } else { //this will run if there is no error
+                        M.toast({ html: data.error, classes: "#d50000 red accent-4" })
+                    } else {
                         M.toast({ html: "Successfully Created Post", classes: "#2e7d32 green darken-3" })
-                        history.push('/') //navigating the user to home screen after succesfully creating post using usehistory hook
+                        history.push('/')
                     }
                 }).catch(err => {
                     console.log(err)
                 })
         }
-    }, [url]) //passing the url in the dependency array so that code will run only when it's updated
+    }, [url])
 
 
 
